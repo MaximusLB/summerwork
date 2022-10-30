@@ -12,7 +12,7 @@ root.title('MXCardShop')
 root.geometry("300x250")
 root.bg="#cae3e1"
 #sets the top left icon 
-root.iconbitmap('C:/Users/maxlu/Documents/IDLE code/Summer project mess 1/images and bitmaps/ring.ico')
+root.iconbitmap(r'C:\Users\maxlu\Documents\GitHub\summerwork\images and bitmaps\ring.ico')
 
 root.rowconfigure(0,weight=1)
 root.columnconfigure(0,weight=1)
@@ -25,8 +25,10 @@ frame3 = tk.Frame(root)
 frame4 = tk.Frame(root)
 frame5 = tk.Frame(root)
 frame6 = tk.Frame(root)
+frame7 = tk.Frame(root)
+frame8 = tk.Frame(root)
 
-for frame in (frame1, frame2, frame3, frame4, frame5, frame6):
+for frame in (frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8):
   frame.grid(row=0,column=0,sticky='nsew')
   tk.Frame(master=root,)
   label = tk.Label(master=root, text=frame1)
@@ -182,9 +184,26 @@ frame6_list.pack()
 frame6_btn = tk.Button(frame6,text='Catalogue',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame4))
 frame6_btn.pack()
 
+frame6_btn_pay = tk.Button(frame6,text='Pay',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame7))
+frame6_btn_pay.pack()
+
+#===============================Frame 7
+
+frame7_title= tk.Label(frame7, text='Checkout',bg="#defcfa")
+frame7_title.pack(fill='x')
 
 
+frame7_btn = tk.Button(frame7,text='Proccess payment',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame8))
+frame7_btn.pack()
 
+#===============================Frame 7
+
+frame8_title= tk.Label(frame8, text='Receipt',bg="#defcfa")
+frame8_title.pack(fill='x')
+
+
+frame8_btn = tk.Button(frame8,text='Return to Catalogue',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame4))
+frame8_btn.pack()
 
 
 
