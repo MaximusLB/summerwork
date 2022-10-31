@@ -12,7 +12,7 @@ root.title('MXCardShop')
 root.geometry("300x250")
 root.bg="#cae3e1"
 #sets the top left icon 
-root.iconbitmap(r'C:\Users\maxlu\Documents\GitHub\summerwork\images and bitmaps\ring.ico')
+root.iconbitmap(r'C:\Users\maxlu\Documents\IDLE code\Summer project mess 1\images and bitmaps\ring.ico')
 
 root.rowconfigure(0,weight=1)
 root.columnconfigure(0,weight=1)
