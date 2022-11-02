@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import *
+#import urllib.request (error 1)
+
+#imgURL = "https://drive.google.com/file/d/1ifP4TG2Jk1gnEmbsZr61mSiTwbi3pzdI/view?usp=sharing" (error 1)
+#ringico=urllib.request.urlretrieve(imgURL, "My Drive/ring.ico") (error 1)
 
 def show_frame(frame):
   frame.tkraise()
@@ -12,7 +16,7 @@ root.title('MXCardShop')
 root.geometry("300x250")
 root.bg="#cae3e1"
 #sets the top left icon 
-root.iconbitmap(r'C:\Users\maxlu\Documents\IDLE code\Summer project mess 1\images and bitmaps\ring.ico')
+#root.iconbitmap(r'ringico')(error 1)
 
 root.rowconfigure(0,weight=1)
 root.columnconfigure(0,weight=1)
