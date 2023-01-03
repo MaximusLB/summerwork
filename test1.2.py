@@ -1,5 +1,13 @@
 import tkinter as tk
 from tkinter import *
+import mysql.connector as sql
+
+conn = sql.connect(
+  host="localhost",
+  user="root",
+  password="RootPass",
+  database="cardbase"
+)
 #import urllib.request (error 1)
 
 #imgURL = "https://drive.google.com/file/d/1ifP4TG2Jk1gnEmbsZr61mSiTwbi3pzdI/view?usp=sharing" (error 1)
