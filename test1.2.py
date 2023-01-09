@@ -8,6 +8,8 @@ conn = sql.connect(
   password="RootPass",
   database="cardbase"
 )
+conn.autocommit = True
+cur = conn.cursor()
 #import urllib.request (error 1)
 
 #imgURL = "https://drive.google.com/file/d/1ifP4TG2Jk1gnEmbsZr61mSiTwbi3pzdI/view?usp=sharing" (error 1)
@@ -51,7 +53,7 @@ global message
 global rusername
 global rpassword
 global rmessage
-global productnumber
+global raccess
 global basket
 username = StringVar()
 password = StringVar()
@@ -67,25 +69,32 @@ basket = [0]
 def login():
   usname = username.get()
   psword = password.get()
-  if usname=='' or psword=='':
-    message.set("fill the empty field!!!")
+  statement = f"SELECT username from user WHERE username='{usname}' AND Password = '{psword}';"
+  cur.execute(statement)
+  if not cur.fetchone():
+    message.set("Login failed")
   else:
-    if usname=="Admin" and psword=="Secret":
-      message.set("Login success"),show_frame(frame4)
-    else:
-      message.set("Invalid username or password")
+    message.set("Login Success"),show_frame(frame4)
+
 
 #==================================Register code
 def register():
   rusname = rusername.get()
   rpsword = rpassword.get()
-  if rusname=='' or rpsword=='':
-    message.set("fill the empty field!!!")
+  raccess = "Customer"
+  if len(rusname)<5 or len(rusname)>12 or len(rpsword)<5 or len(rpsword)>12:
+    rmessage.set("Both fields must be between 5 to 12 characters")
+    register()
   else:
-    if rusname==rusname and rpsword==rpsword:
+    rstatement = f"SELECT username from user WHERE username='{rusname}';"
+    cur.execute(rstatement)
+    if not cur.fetchone():
+      rstatement2 = "INSERT INTO user (username, password, access) VALUES (%s, %s, %s)"
+      values = (rusname, rpsword, raccess)
+      cur.execute(rstatement2, values)
       rmessage.set("Register success"),show_frame(frame4)
     else:
-      rmessage.set("Invalid username or password")
+      rmessage.set("Username in use")
 
 #==================================Basket append
 def basketap():
