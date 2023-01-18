@@ -1,7 +1,10 @@
+#Imports the libraries 
 import tkinter as tk
 from tkinter import *
+from tkinter.ttk import *
 import mysql.connector as sql
 
+#Connects the database
 conn = sql.connect(
   host="localhost",
   user="root",
@@ -10,11 +13,9 @@ conn = sql.connect(
 )
 conn.autocommit = True
 cur = conn.cursor()
-#import urllib.request (error 1)
 
-#imgURL = "https://drive.google.com/file/d/1ifP4TG2Jk1gnEmbsZr61mSiTwbi3pzdI/view?usp=sharing" (error 1)
-#ringico=urllib.request.urlretrieve(imgURL, "My Drive/ring.ico") (error 1)
 
+#Sets a fram variable
 def show_frame(frame):
   frame.tkraise()
 
@@ -25,9 +26,12 @@ root.state('normal')
 root.title('MXCardShop')
 root.geometry("300x250")
 root.bg="#cae3e1"
-#sets the top left icon 
-#root.iconbitmap(r'ringico')(error 1)
 
+#sets the top left icon 
+ico1 = PhotoImage(file ='icon.gif')
+root.iconphoto(True, ico1)
+
+#Sets or and collumn weight
 root.rowconfigure(0,weight=1)
 root.columnconfigure(0,weight=1)
 
@@ -42,11 +46,13 @@ frame6 = tk.Frame(root)
 frame7 = tk.Frame(root)
 frame8 = tk.Frame(root)
 
+#Sets all frames to root settings
 for frame in (frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8):
   frame.grid(row=0,column=0,sticky='nsew')
   tk.Frame(master=root,)
   label = tk.Label(master=root, text=frame1)
 
+#Defining variables and their scopes
 global username
 global password
 global message
@@ -62,7 +68,19 @@ rusername = StringVar()
 rpassword = StringVar()
 rmessage = StringVar()
 productnumber = StringVar()
-basket = [0]
+basket = list()
+basketprice = list()
+baskettext = list()
+
+#Creates lists for the basket (WIP)
+def basketap(self,item):
+  basket.append(item)
+
+def basketapprice(self,cost):
+  basketprice.append(cost)
+
+def basketaptext(self,text):
+  basket.append(text)
 
 
 #==================================login code
@@ -97,8 +115,14 @@ def register():
       rmessage.set("Username in use")
 
 #==================================Basket append
-def basketap():
-  basket.append(productnumber)
+def basketap(productNumber):
+  basket.append(productNumber)
+
+def basketapprice(productPrice):
+  basket.append(productPrice)
+
+def basketap(productName):
+  basket.append(productName)
 
 #==================================Frame 1 code
 frame1_title= tk.Label(frame1, text='Choose Login or Register',bg="#defcfa")
@@ -174,35 +198,44 @@ frame5_btn_basket= tk.Button(frame5,text='Basket',height="1",width="15",bg="#def
 frame5_btn_basket.pack()
 
 
-frame5_btn_c1 = tk.Button(frame5,text='Card 1',height="2",width="30",bg="#defcfa", command=lambda:[productnumber.set("1"),basketap()])
+frame5_btn_c1 = tk.Button(frame5,text='1.Blue Birthday Card \n £2.99',height="2",width="30",bg="#defcfa", command=lambda:[basketap(1),basketapprice(1),basketaptext("Blue Birthday Card")])
 frame5_btn_c1.pack()
 
-frame5_btn_c2= tk.Button(frame5,text='Card 2',height="2",width="30",bg="#defcfa", command=lambda:[productnumber.set("2"),basketap()])
+frame5_btn_c2= tk.Button(frame5,text='2.Red Birthday Card \n £2.99',height="2",width="30",bg="#defcfa", command=lambda:[basketap(2),basketapprice(2),basketaptext("Red Birthday Card")])
 frame5_btn_c2.pack()
 
-frame5_btn_c3= tk.Button(frame5,text='Card 3',height="2",width="30",bg="#defcfa", command=lambda:[productnumber.set("3"),basketap()])
+frame5_btn_c3= tk.Button(frame5,text='3.Green Birthday Card \n £2.99',height="2",width="30",bg="#defcfa", command=lambda:[basketap(3),basketapprice(3),basketaptext("Green  Birthday Card")])
 frame5_btn_c3.pack()
 
-frame5_btn_c4= tk.Button(frame5,text='Card 4',height="2"
-                         ,width="30",bg="#defcfa", command=lambda:[productnumber.set("4"),basketap()])
+frame5_btn_c4= tk.Button(frame5,text='4.White Anniversary \n £5',height="2" ,width="30",bg="#defcfa", command=lambda:[basketap(4),basketapprice(5),basketaptext("White Anniversary")])
 frame5_btn_c4.pack()
 
-frame5_btn_c5= tk.Button(frame5,text='Card 5',height="2",width="30",bg="#defcfa", command=lambda:[productnumber.set("5"),basketap()])
+frame5_btn_c5= tk.Button(frame5,text='5.Purple Congratulations \n £4',height="2",width="30",bg="#defcfa", command=lambda:[basketap(5),basketapprice(4),basketaptext("Purple Congratulations")])
 frame5_btn_c5.pack()
 
-frame5_btn_c6= tk.Button(frame5,text='Card 6',height="2",width="30",bg="#defcfa", command=lambda:[productnumber.set("6"),basketap()])
+frame5_btn_c6= tk.Button(frame5,text='6.Orange Congratulations \n £4',height="2",width="30",bg="#defcfa", command=lambda:[basketap(6),basketapprice(4),basketaptext("Orange Congratulations")])
 frame5_btn_c6.pack()
 
+frame5_btn_c7= tk.Button(frame5,text='7.Red Valentines \n £3.50',height="2",width="30",bg="#defcfa", command=lambda:[basketap(7),basketapprice(3.5),basketaptext("Red Valentines")])
+frame5_btn_c7.pack()
 
+frame5_btn_c8= tk.Button(frame5,text='8.Pink Valentines \n £3.50',height="2",width="30",bg="#defcfa", command=lambda:[basketap(8),basketapprice(3.5),basketaptext("Pink Valentines")])
+frame5_btn_c8.pack()
+
+frame5_btn_c9= tk.Button(frame5,text='9.Dark Red Valentines \n £3.50',height="2",width="30",bg="#defcfa", command=lambda:[basketap(9),basketapprice(3.5),basketaptext("Dark Red Valentines")])
+frame5_btn_c9.pack()
+
+frame5_btn_out= tk.Button(frame5,text='output list',height="2",width="30",bg="#defcfa", command=lambda:[print(basketap[:]), print(basketapprice[:], print(basketaptext[:]))])
+frame5_btn_out.pack()
 #===============================Frame 6
 
 frame6_title= tk.Label(frame6, text='Basket',bg="#defcfa")
 frame6_title.pack(fill='x')
 
-frame6_list=tk.Label(frame6, text=print(basket[:]), bg="#defcfa")
+frame6_list=tk.Label(frame6, text=(basket[:]), bg="#defcfa")
 frame6_list.pack()
 
-frame6_btn = tk.Button(frame6,text='Catalogue',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame4))
+frame6_btn = tk.Button(frame6,text='Catalogue',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame5))
 frame6_btn.pack()
 
 frame6_btn_pay = tk.Button(frame6,text='Pay',height="2",width="30",bg="#defcfa",command=lambda:show_frame(frame7))
