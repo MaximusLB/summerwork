@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
 import mysql.connector as sql
+from datetime import date
 
 #Connects the database
 conn = sql.connect(
@@ -22,14 +23,16 @@ def show_frame(frame):
 
 #setting the program wide details
 root = tk.Tk()
-root.state('normal')
+root.state('zoomed')
 root.title('NyahaGifts')
-root.geometry("300x250")
+root.geometry("1080x1920")
 root.bg="#cae3e1"
 
 #sets the top left icon 
-ico1 = PhotoImage(file ='icon.gif')
+ico1 = PhotoImage(file ='nyaicon.gif')
 root.iconphoto(True, ico1)
+logo1 = PhotoImage(0,0, file = "nyaicon.gif")
+
 
 #Sets or and collumn weight
 root.rowconfigure(0,weight=1)
@@ -49,38 +52,56 @@ frame8 = tk.Frame(root)
 #Sets all frames to root settings
 for frame in (frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8):
   frame.grid(row=0,column=0,sticky='nsew')
-  tk.Frame(master=root,)
+  tk.Frame(master=root,bg="#FFFFFF")
   label = tk.Label(master=root, text=frame1)
+
+#Imports images
+#logo = ImageTk.PhotoImage(Image.open("nyalogo.jpg"))
+
 
 #Defining variables and their scopes
 global username
 global password
+global usname
+global psword
 global message
 global rusername
 global rpassword
 global rmessage
 global raccess
 global basket
+global recmessage
+global UID
 username = StringVar()
 password = StringVar()
+usname = StringVar()
+psword = StringVar()
 message = StringVar()
 rusername = StringVar()
 rpassword = StringVar()
 rmessage = StringVar()
 productnumber = StringVar()
+recmessage = StringVar()
+totalID = StringVar()
+totalItems = StringVar()
 basket = list()
 basketprice = list()
 baskettext = list()
+totalID = ' '.join(basket)
+totalItems = baskettext[:]
+totalPrice = StringVar()
+updatebaskettext = tk.StringVar()
+updatebasketprice = tk.StringVar()
 
 #Creates lists for the basket (WIP)
-def basketap(self,item):
-  basket.append(item)
+#def basketap(self,item):
+  #basket.append(item)
 
-def basketapprice(self,cost):
-  basketprice.append(cost)
+#def basketapprice(self,cost):
+ # basketprice.append(cost)
 
-def basketaptext(self,text):
-  basket.append(text)
+#def basketaptext(self,text):
+ # basket.append(text)
 
 
 #==================================login code
@@ -114,25 +135,54 @@ def register():
     else:
       rmessage.set("Username in use")
 
+
+
 #==================================Basket append
-def basketap(productNumber):
+def basketap(productNumber,productPrice,productName):
   basket.append(productNumber)
+  basketprice.append(productPrice)
+  baskettext.append(productName)
 
-def basketapprice(productPrice):
-  basket.append(productPrice)
+def basketPrints():
+  print("IDs: ",basket[:])
+  print("Prices: ",basketprice[:])
+  print("Items: ",baskettext[:])
+  totalPrice = str(sum(basketprice))
+  print("Total = £",totalPrice)
+  totalItems = str("\n".join(baskettext))
+  updatebaskettext.set (totalItems)
+  updatebasketprice.set (totalPrice)
+ 
 
-def basketap(productName):
-  basket.append(productName)
+#===================================Receipt gen
+def Receipt():
+    show_frame(frame8)
+    recstatement = f"SELECT UserID from user WHERE username='{usname}';"
+    cur.execute(recstatement)
+    UID = cur.fetchone()
+    recdate = date.today()
+    str(totalPrice)
+    str(totalID)
+    recstatement2 = "INSERT INTO sales (UserID,CardIDs,Price) VALUES (%s,%s,%s)"
+    recvalues = (UID, totalID, totalPrice)
+    cur.execute(recstatement2, recvalues)
+    recmessage.set("Receipt added to database")
+
+  
 
 #==================================Frame 1 code
-frame1_title= tk.Label(frame1, text='Choose Login or Register',bg="#fadadd")
+
+frame1_title= tk.Label(frame1, text='~NyahaGifts~\nChoose Login or Register',font=('Helvetica bold',24),height="5",bg="#fadadd")
 frame1_title.pack(fill='x')
 
-frame1_btn = tk.Button(frame1,text='Login',height="2",width="30",bg="#fadadd",command=lambda:show_frame(frame2))
-frame1_btn.pack()
+frame1_photo= tk.Label(frame1, image= logo1,height="20",width="300")
+frame1_photo.pack(anchor="nw")
 
-frame1_btn_skip = tk.Button(frame1,text='Register',height="2",width="30",bg="#fadadd",command=lambda:show_frame(frame3))
-frame1_btn_skip.pack()
+frame1_btn = tk.Button(frame1,text='Login',height="5",width="75",bg="#fadadd",command=lambda:show_frame(frame2))
+frame1_btn.pack(padx=15, pady=60)
+
+frame1_btn_skip = tk.Button(frame1,text='Register',height="5",width="75",bg="#fadadd",command=lambda:show_frame(frame3))
+frame1_btn_skip.pack(padx=15, pady=10)
 
 #==================================Frame 2 code
 
@@ -198,42 +248,54 @@ frame5_btn_basket= tk.Button(frame5,text='Basket',height="1",width="15",bg="#fad
 frame5_btn_basket.pack()
 
 
-frame5_btn_c1 = tk.Button(frame5,text='1.Blue Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(1),basketapprice(1),basketaptext("Blue Birthday Card")])
+frame5_btn_c1 = tk.Button(frame5,text='1.Blue Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(1,float(2.99),"Blue Birthday Card")])
 frame5_btn_c1.pack()
 
-frame5_btn_c2= tk.Button(frame5,text='2.Red Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(2),basketapprice(2),basketaptext("Red Birthday Card")])
+frame5_btn_c2= tk.Button(frame5,text='2.Red Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(2,2.99,"Red Birthday Card")])
 frame5_btn_c2.pack()
 
-frame5_btn_c3= tk.Button(frame5,text='3.Green Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(3),basketapprice(3),basketaptext("Green  Birthday Card")])
+frame5_btn_c3= tk.Button(frame5,text='3.Green Birthday Card \n £2.99',height="2",width="30",bg="#fadadd", command=lambda:[basketap(3,2.99,"Green Birthday Card")])
 frame5_btn_c3.pack()
 
-frame5_btn_c4= tk.Button(frame5,text='4.White Anniversary \n £5',height="2" ,width="30",bg="#fadadd", command=lambda:[basketap(4),basketapprice(5),basketaptext("White Anniversary")])
+frame5_btn_c4= tk.Button(frame5,text='4.White Anniversary \n £5',height="2" ,width="30",bg="#fadadd", command=lambda:[basketap(4,5.00,"White Anniversary")])
 frame5_btn_c4.pack()
 
-frame5_btn_c5= tk.Button(frame5,text='5.Purple Congratulations \n £4',height="2",width="30",bg="#fadadd", command=lambda:[basketap(5),basketapprice(4),basketaptext("Purple Congratulations")])
+frame5_btn_c5= tk.Button(frame5,text='5.Purple Congratulations \n £4',height="2",width="30",bg="#fadadd", command=lambda:[basketap(5,4.00,"Purple Congratulations")])
 frame5_btn_c5.pack()
 
-frame5_btn_c6= tk.Button(frame5,text='6.Orange Congratulations \n £4',height="2",width="30",bg="#fadadd", command=lambda:[basketap(6),basketapprice(4),basketaptext("Orange Congratulations")])
+frame5_btn_c6= tk.Button(frame5,text='6.Orange Congratulations \n £4',height="2",width="30",bg="#fadadd", command=lambda:[basketap(6,4.00,"Orange Congratulations")])
 frame5_btn_c6.pack()
 
-frame5_btn_c7= tk.Button(frame5,text='7.Red Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(7),basketapprice(3.5),basketaptext("Red Valentines")])
+frame5_btn_c7= tk.Button(frame5,text='7.Red Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(7,3.50,"Red Valentines")])
 frame5_btn_c7.pack()
 
-frame5_btn_c8= tk.Button(frame5,text='8.Pink Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(8),basketapprice(3.5),basketaptext("Pink Valentines")])
+frame5_btn_c8= tk.Button(frame5,text='8.Pink Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(8,3.50,"Pink Valentines")])
 frame5_btn_c8.pack()
 
-frame5_btn_c9= tk.Button(frame5,text='9.Dark Red Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(9),basketapprice(3.5),basketaptext("Dark Red Valentines")])
+frame5_btn_c9= tk.Button(frame5,text='9.Dark Red Valentines \n £3.50',height="2",width="30",bg="#fadadd", command=lambda:[basketap(9,3.50,"Dark Red Valentines")])
 frame5_btn_c9.pack()
 
-frame5_btn_out= tk.Button(frame5,text='output list',height="2",width="30",bg="#fadadd", command=lambda:[print(basketap[:]), print(basketapprice[:], print(basketaptext[:]))])
+frame5_btn_out= tk.Button(frame5,text='output list',height="2",width="30",bg="#fadadd", command=lambda:[basketPrints()])
 frame5_btn_out.pack()
 #===============================Frame 6
 
 frame6_title= tk.Label(frame6, text='Basket',bg="#fadadd")
 frame6_title.pack(fill='x')
 
-frame6_list=tk.Label(frame6, text=(basket[:]), bg="#fadadd")
+frame6_listtitle=tk.Label(frame6, text="Items", bg="#fadadd")
+frame6_listtitle.pack()
+
+frame6_list=tk.Label(frame6, textvariable=updatebaskettext,)
 frame6_list.pack()
+
+frame6_listtitleprice=tk.Label(frame6, text="Price £", bg="#fadadd")
+frame6_listtitleprice.pack()
+
+frame6_listprice=tk.Label(frame6, textvariable=updatebasketprice,)
+frame6_listprice.pack()
+
+frame6_btn_update = tk.Button(frame6,text='Update Basket',height="2",width="30",bg="#fadadd",command=lambda:basketPrints())
+frame6_btn_update.pack()
 
 frame6_btn = tk.Button(frame6,text='Catalogue',height="2",width="30",bg="#fadadd",command=lambda:show_frame(frame5))
 frame6_btn.pack()
@@ -247,7 +309,7 @@ frame7_title= tk.Label(frame7, text='Checkout',bg="#fadadd")
 frame7_title.pack(fill='x')
 
 
-frame7_btn = tk.Button(frame7,text='Proccess payment',height="2",width="30",bg="#fadadd",command=lambda:show_frame(frame8))
+frame7_btn = tk.Button(frame7,text='Proccess payment',height="2",width="30",bg="#fadadd",command=lambda:Receipt())
 frame7_btn.pack()
 
 #===============================Frame 7
@@ -255,6 +317,8 @@ frame7_btn.pack()
 frame8_title= tk.Label(frame8, text='Receipt',bg="#fadadd")
 frame8_title.pack(fill='x')
 
+frame8_feedback = tk.Label(frame8, text="",textvariable=recmessage)
+frame8_feedback.pack()
 
 frame8_btn = tk.Button(frame8,text='Return to Catalogue',height="2",width="30",bg="#fadadd",command=lambda:show_frame(frame4))
 frame8_btn.pack()
