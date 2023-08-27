@@ -113,7 +113,7 @@ def login():
   if not cur.fetchone():
     message.set("Login failed")
   else:
-    message.set("Login Success"),show_frame(frame4)
+    message.set("Login success"),show_frame(frame4)
 
 
 #==================================Register code
